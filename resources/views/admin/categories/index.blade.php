@@ -15,12 +15,13 @@
 
             <div class="team">
                 <div class="row">
-                    <a href="{{ url('/admin/categories/create') }}" class="btn btn-primary btn-round">Nuevo categoría</a>
+                    <a href="{{ url('/admin/categories/create') }}" class="btn btn-primary btn-round">Nueva categoría</a>
                     <table class="table">
                         <thead>
                             <tr>
                                 <th class="col-md-2 text-center">Nombre</th>
                                 <th class="col-md-5 text-center">Descripción</th>
+                                <th>Imágen</th>
                                 <th class="text-right">Acciones</th>
                             </tr>
                         </thead>
@@ -29,6 +30,9 @@
                             <tr>
                                 <td>{{ $category->name }}</td>
                                 <td>{{ $category->description }}</td>
+                                <td>
+                                    <img src="{{ $category->featured_image_url }}" alt="Imágen de la categoría" height="50">
+                                </td>
                                 <td class="td-actions text-right">
                                     <form method="POST" action="{{ url('/admin/categories/'.$category->id) }}">
                                         {{ csrf_field() }}

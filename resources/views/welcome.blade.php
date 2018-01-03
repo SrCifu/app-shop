@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Bienvenido a App Shop')
+@section('title', 'Bienvenido a '. config('app.name'))
 
 @section('body-class', 'landing-page')
 
@@ -19,6 +19,47 @@
             display: flex;
             flex-direction: column;
         }
+
+        .tt-query {
+          -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+             -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+                  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+        }
+
+        .tt-hint {
+          color: #999
+        }
+
+        .tt-menu {    /* used to be tt-dropdown-menu in older versions */
+          width: 159px;
+          margin-top: 4px;
+          padding: 4px 0;
+          background-color: #fff;
+          border: 1px solid #ccc;
+          border: 1px solid rgba(0, 0, 0, 0.2);
+          -webkit-border-radius: 4px;
+             -moz-border-radius: 4px;
+                  border-radius: 4px;
+          -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+             -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
+                  box-shadow: 0 5px 10px rgba(0,0,0,.2);
+        }
+
+        .tt-suggestion {
+          padding: 3px 20px;
+          line-height: 24px;
+          text-align: left;
+        }
+
+        .tt-suggestion.tt-cursor,.tt-suggestion:hover {
+          color: #fff;
+          background-color: #0097cf;
+
+        }
+
+        .tt-suggestion p {
+          margin: 0;
+        }
     </style>
 @endsection
 
@@ -27,7 +68,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-6">
-                <h1 class="title">Bienvenido a App Shop.</h1>
+                <h1 class="title">Bienvenido a {{ config('app.name') }}.</h1>
                 <h4>Realiza pedidos en línea y te contactaremos para coordinar la entraga.</h4>
                 <br />
                 <a href="#" class="btn btn-danger btn-raised btn-lg">
@@ -85,7 +126,7 @@
             <h2 class="title">Visita nuestras categorías</h2>
 
             <form class="form-inline" action="{{ url('/search') }}" method="GET">
-                <input type="text" placeholder="¿Qué producto buscas?" class="form-control" name="query">
+                <input type="text" placeholder="¿Qué producto buscas?" class="form-control" name="query" id="search">
                 <button type="submit" class="btn btn-primary btn-just-icon">
                     <i class="material-icons">search</i>
                 </button>
@@ -106,51 +147,68 @@
                     @endforeach
                 </div>
             </div>
-
         </div>
 
-
+        @guest
         <div class="section landing-section">
             <div class="row">
                 <div class="col-md-8 col-md-offset-2">
                     <h2 class="text-center title">¿Aún no te has registrado?</h2>
                     <h4 class="text-center description">Regístrate ingresando tus datos básicos y podrás realizar tus pedidos a través de nuestro carrito de compras. Si aún no te decides, de todas formas, con tu cuenta de usuario podrás hacer todas tus consultas sin compromiso.</h4>
-                    <form class="contact-form">
+                    <form class="contact-form" method="GET" action="{{ url('/register') }}">
+                        {{ csrf_field() }}
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group label-floating">
                                     <label class="control-label">Nombre</label>
-                                    <input type="email" class="form-control">
+                                    <input name="name" type="text" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group label-floating">
                                     <label class="control-label">Correo electrónico</label>
-                                    <input type="email" class="form-control">
+                                    <input name="email" type="email" class="form-control">
                                 </div>
                             </div>
                         </div>
-
-                        <div class="form-group label-floating">
-                            <label class="control-label">Tu mensaje</label>
-                            <textarea class="form-control" rows="4"></textarea>
-                        </div>
-
                         <div class="row">
                             <div class="col-md-4 col-md-offset-4 text-center">
-                                <button class="btn btn-primary btn-raised">
-                                    Enviar consulta
+                                <button type="submit" class="btn btn-primary btn-raised">
+                                    Iniciar registro
                                 </button>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
-
         </div>
+        @endguest
+        
     </div>
 
 </div>
 
 @include('includes.footer')
+@endsection
+
+@section('scripts')
+    <script src="{{ asset('/js/typeahead.bundle.min.js') }}"></script>
+    <script>
+        $(function () {
+            var products = new Bloodhound({
+                datumTokenizer: Bloodhound.tokenizers.whitespace,
+                queryTokenizer: Bloodhound.tokenizers.whitespace,
+                prefetch: '{{ url("/products/json") }}'
+            });
+            // inicializar typeahead sobre nuestro input de búsqueda
+            $('#search').typeahead({
+                hint: true,
+                highlight: true,
+                minLength: 1
+            }, {
+                name: 'products',
+                source: products
+            });
+        });
+    </script>
 @endsection

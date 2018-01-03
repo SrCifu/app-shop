@@ -77,27 +77,5 @@
     </div>
 </div>
 
-<div class="modal fade" id="modalAddToCart" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">Seleccione la cantidad que desea añadir</h4>
-      </div>
-      <form action="{{ url('/cart') }}" method="POST">
-            {{ csrf_field() }}
-            <input type="hidden" name="product_id" value="{{ $product->id }}">
-          <div class="modal-body">
-                <input type="number" name="quantity" value="1" class="form-control">
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default btn-simple" data-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-info btn-simple">Añadir al carrito</button>
-          </div>
-      </form>
-    </div>
-  </div>
-</div>
-
 @include('includes.footer')
 @endsection

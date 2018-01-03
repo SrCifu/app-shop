@@ -12,16 +12,18 @@
 */
 
 Route::get('/', 'TestController@welcome');
+Route::get('/register', 'RegisterController@showRegistrationForm');
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('/search', 'SearchController@show');
+Route::get('/products/json', 'SearchController@data');
+
 Route::get('/products/{id}', 'ProductController@show'); // ver producto
 
 Route::get('/categories/{category}', 'CategoryController@show'); // ver categoría
-
-Route::get('/search', 'SearchController@show');
 
 Route::post('/cart', 'CartDetailController@store'); // crear carrito
 Route::delete('/cart', 'CartDetailController@destroy'); // eliminar producto del carrito
