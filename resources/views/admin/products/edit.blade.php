@@ -23,7 +23,6 @@
                     </ul>
                 </div>
             @endif
-            
             <form method="POST" action="{{ url('/admin/products/'.$product->id.'/edit') }}">
                 {{ csrf_field() }}
 
